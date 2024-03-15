@@ -1,22 +1,32 @@
 class Toast {
 	#toastTypes = ["info", "error", "ok", "warning", "none", "important"]
+	
 	#toastDataAttribute = {
 		data: "data-toast",
 		type: "data-toast-type"
 	};
-	#animatedValues = [
-		"opacity",
-		"visibility",
-		"bottom",
-		"background-color"
-	]
 
+	#toastElements = [
+		{
+			"prefix",
+			
+		},
+		["suffix"],
+		["content", "p"]
+	]
 
 	#attributes = [
 		["role", "status"],
 		["aria-live", "polite"],
 		["class", "toast"]
 	];
+
+	#animatedValues = [
+		"opacity",
+		"visibility",
+		"bottom",
+		"background-color"
+	]
 
 	#timeout = null;
 	#showing = false;
@@ -44,17 +54,19 @@ class Toast {
 	}
 
 	#injectContent() {
-		const prefix = document.createElement("div"),
-			suffix = document.createElement("div"),
-			timer = document.createElement("div"),
-			content = document.createElement("p");
+		const $timer = document.createElement("div");
+		const $toastElements = this.#toastElements.map((el) => {
+			const $el = document.createElement(el[1]);
+			$el.className = `toast-${el[0]}`
+			return {
+				$element: $el,
+				name: el[0]
+			}
+		})
 
-		prefix.className = "toast-prefix";
-		suffix.classList = "toast-suffix";
-		content.className = "toast-content";
-		timer.id = "toast-timer";
-		timer.style.animationDuration = `${(this.options.hideDelay ?? 2000) / 1.15}ms`;
-
+		$timer.id = "toast-timer";
+		$timer.style.animationDuration = `${(this.options.hideDelay ?? 2000) / 1.15}ms`;
+		
 
 		suffix.addEventListener("click", () => {
 			this.#hide(true);
@@ -70,10 +82,8 @@ class Toast {
 			this.#hide();
 		});
 
-		this.container.appendChild(prefix);
-		this.container.appendChild(content);
-		this.container.appendChild(suffix);
-		this.container.appendChild(timer);
+		$toastElements.forEach((el) => this.container.appendChild(el.$element));
+		this.container.appendChild($timer);
 	}
 
 	#setupTriggers() {

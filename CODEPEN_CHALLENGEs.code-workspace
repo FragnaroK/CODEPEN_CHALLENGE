@@ -4,6 +4,11 @@
 			"path": "."
 		}
 	],
+	"extensions": {
+		"recommendations": [
+			"RitwickDey.LiveServer" 
+		]
+	},
 	"settings": {
 		"peacock.color": "#FF000031",
 		"workbench.colorCustomizations": {
